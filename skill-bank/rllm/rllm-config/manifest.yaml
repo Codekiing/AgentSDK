@@ -1,0 +1,57 @@
+active:
+- 001-model-safety
+- 002-param-constraints
+- 003-difficulty
+- 004-pre-check
+- traj-20260501-155627-param-ranges
+- traj-20260502-001000-problem-count
+- traj-20260502-202806-difficulty-scaling
+- traj-20260502-202806-seed-strategy
+- traj-20260502-202806-problem-count-update
+- traj-20260502-213850-problem-count-refine
+- traj-20260502-152342-param-ranges
+- traj-20260503-091930-param-ranges
+- traj-20260503-094219-param-ranges
+- traj-20260518-080303-param-ranges
+- 005-7b-multi-gpu
+- 006-hardware-config
+- 007-dataset-scope-isolation
+- 008-verl-config-generation
+- traj-20260531-185031-param-ranges
+- traj-20260531-185031-tuning
+- traj-20260531-185031-initial-config
+- traj-20260601-012036-param-ranges
+- traj-20260601-012036-initial-config
+- traj-20260601-040729-param-ranges
+- traj-20260601-040729-tuning
+- traj-20260601-120827-param-ranges
+- traj-20260601-120827-initial-config
+- traj-20260601-120827-tuning
+- traj-20260601-120905-param-ranges-0.5b-limit
+- traj-20260601-120905-tuning-entropy-monitor
+- traj-20260601-133308-initial-config
+- traj-20260601-133308-param-ranges
+- traj-20260601-135344-initial-config
+- traj-20260601-135344-param-ranges
+- traj-20260602-010913-param-ranges-entropy-linkage
+- traj-20260602-020933-param-ranges
+base: base.md
+disabled:
+- traj-20260502-213850-late-forgetting-tuning
+profiles:
+  large-model:
+    active:
+    - 002-param-constraints
+    - 003-difficulty
+    - 004-pre-check
+    description: 3B 模型的宽松配置
+    disabled:
+    - 001-model-safety
+  small-model:
+    active:
+    - 001-model-safety
+    - 002-param-constraints
+    - 003-difficulty
+    - 004-pre-check
+    description: 0.5B 模型的保守配置
+    disabled: []

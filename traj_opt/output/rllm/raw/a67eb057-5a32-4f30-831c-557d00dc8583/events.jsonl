@@ -1,0 +1,1 @@
+{"type": "turn_end", "session_id": "a67eb057-5a32-4f30-831c-557d00dc8583", "conversation_id": "a67eb057-5a32-4f30-831c-557d00dc8583", "timestamp": "2026-05-25T08:01:53.973260+00:00", "layer": "rllm", "tool_name": null, "tool_input": null, "tool_response": null, "success": null, "files_touched": []}

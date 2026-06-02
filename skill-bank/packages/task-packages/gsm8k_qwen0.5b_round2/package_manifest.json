@@ -1,0 +1,28 @@
+{
+  "id": "task:gsm8k_qwen0.5b_round2",
+  "type": "task_package",
+  "status": "frozen",
+  "created_at": "2026-06-01T06:13:40.963460+00:00",
+  "domain": "math",
+  "task_id": "gsm8k_qwen0.5b_round2",
+  "run_id": "run_1780283875",
+  "source_skill_package": "stable:rllm-stable-v3",
+  "paths": {
+    "agent": "agent/",
+    "skills": "skills/source_package/",
+    "code": "code/",
+    "configs": "configs/",
+    "data": "data/",
+    "rewards": "rewards/",
+    "eval": "eval/",
+    "docs": "docs/",
+    "trajectories": "trajectories/",
+    "provenance": "provenance.json"
+  },
+  "copied_artifacts": {
+    "config": "configs/config.json",
+    "training_log": "docs/training_log.txt",
+    "trajectories": "trajectories/run"
+  },
+  "artifact_refs": {}
+}

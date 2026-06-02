@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Model weights (download separately)
+Qwen2.5-*/
+*.bin
+*.safetensors
+*.gguf
+
+# Virtual environments
+test/
+venv/
+.venv/
+
+# Training outputs
+outputs/
+checkpoints/
+rllm_train/output/
+
+# VERL framework (separate repos)
+verl/
+verl_latest/
+
+# Training run outputs
+verl_test_outputs/
+verl_test_outputs_v2/
+verl_test_outputs_v3/
+verl_test_outputs_v4/
+
+# Datasets
+data/
+
+# IDE & OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Temp / scratch files
+=0.*
+base.md

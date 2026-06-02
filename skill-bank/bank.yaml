@@ -1,0 +1,54 @@
+version: "1.0"
+
+groups:
+  rllm:
+    description: "rllm_train agent RL 训练相关"
+    skills:
+      rllm-config:
+        output: .claude/skills/rllm-config/SKILL.md
+      rllm-analyze:
+        output: .claude/skills/rllm-analyze/SKILL.md
+      rllm-analyze-deep:
+        output: .claude/skills/rllm-analyze-deep/SKILL.md
+      rllm-monitor:
+        output: .claude/skills/rllm-monitor/SKILL.md
+      rllm-train:
+        output: .claude/skills/rllm-train/SKILL.md
+      rllm-clarify:
+        output: .claude/skills/rllm-clarify/SKILL.md
+      rllm-run:
+        output: .claude/skills/rllm-run/SKILL.md
+      rllm-remote-run:
+        output: .claude/skills/rllm-remote-run/SKILL.md
+      rllm-remote-monitor:
+        output: .claude/skills/rllm-remote-monitor/SKILL.md
+      rllm-config-check:
+        output: .claude/skills/rllm-config-check/SKILL.md
+      rllm-remote-connect:
+        output: .claude/skills/rllm-remote-connect/SKILL.md
+      rllm-analyze-accuracy:
+        output: .claude/skills/rllm-analyze-accuracy/SKILL.md
+
+  traj:
+    description: "trajectory 轨迹捕获、分析与 skill 优化"
+    skills:
+      traj-setup:
+        output: .claude/skills/traj-setup/SKILL.md
+      traj-segment:
+        output: .claude/skills/traj-segment/SKILL.md
+      traj-analyze-rllm:
+        output: .claude/skills/traj-analyze-rllm/SKILL.md
+      traj-optimize:
+        output: .claude/skills/traj-optimize/SKILL.md
+      traj-status:
+        output: .claude/skills/traj-status/SKILL.md
+      traj-loop:
+        output: .claude/skills/traj-loop/SKILL.md
+      traj-train-optimize:
+        output: .claude/skills/traj-train-optimize/SKILL.md
+      traj-launch-training:
+        output: .claude/skills/traj-launch-training/SKILL.md
+
+settings:
+  compiled_dir: compiled
+  output_base: ../

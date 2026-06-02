@@ -1,0 +1,46 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python traj_opt/hooks/post_tool.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python traj_opt/hooks/on_stop.py"
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python traj_opt/hooks/on_stop.py --subagent"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "Bash": {
+      "allow": [
+        "bash rllm_train/output/runs/*/run_verl.sh*",
+        "python rllm_train/monitor_agent_verl.py*",
+        "tail *rllm_train/output/runs/*/training_log.txt*"
+      ]
+    }
+  }
+}

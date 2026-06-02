@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -m pytest tests/base/utils/test_device_utils.py -v)",
+      "Bash(python -m pytest tests/base/utils/test_device_utils.py -v -p no:hypothesis)",
+      "Bash(pip install *)",
+      "Bash(python *)",
+      "Bash(pip3 install *)",
+      "Bash(pip uninstall *)",
+      "Bash(git stash *)",
+      "Bash(nvidia-smi --query-gpu=index,name,memory.total,memory.free --format=csv,noheader)",
+      "Bash(python3 *)",
+      "Bash(pip show *)"
+    ]
+  }
+}

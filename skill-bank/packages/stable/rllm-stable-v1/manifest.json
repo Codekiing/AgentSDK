@@ -1,0 +1,129 @@
+{
+  "id": "stable:rllm-stable-v1",
+  "type": "stable",
+  "status": "candidate",
+  "created_at": "2026-05-25T14:23:16.341508+00:00",
+  "source_compiled_version": "v015",
+  "source_snapshot": "skill-bank/compiled/v015",
+  "compatibility_mode": true,
+  "source_layout": "skill-bank/<group>/<skill>",
+  "runtime_output_root": ".claude/skills",
+  "snapshot_root": "skill-bank/compiled",
+  "skill_count": 19,
+  "skills": [
+    {
+      "name": "rllm-analyze",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-analyze",
+      "output": ".claude/skills/rllm-analyze/SKILL.md"
+    },
+    {
+      "name": "rllm-analyze-accuracy",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-analyze-accuracy",
+      "output": ".claude/skills/rllm-analyze-accuracy/SKILL.md"
+    },
+    {
+      "name": "rllm-clarify",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-clarify",
+      "output": ".claude/skills/rllm-clarify/SKILL.md"
+    },
+    {
+      "name": "rllm-config",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-config",
+      "output": ".claude/skills/rllm-config/SKILL.md"
+    },
+    {
+      "name": "rllm-config-check",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-config-check",
+      "output": ".claude/skills/rllm-config-check/SKILL.md"
+    },
+    {
+      "name": "rllm-monitor",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-monitor",
+      "output": ".claude/skills/rllm-monitor/SKILL.md"
+    },
+    {
+      "name": "rllm-remote-connect",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-remote-connect",
+      "output": ".claude/skills/rllm-remote-connect/SKILL.md"
+    },
+    {
+      "name": "rllm-remote-monitor",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-remote-monitor",
+      "output": ".claude/skills/rllm-remote-monitor/SKILL.md"
+    },
+    {
+      "name": "rllm-remote-run",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-remote-run",
+      "output": ".claude/skills/rllm-remote-run/SKILL.md"
+    },
+    {
+      "name": "rllm-run",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-run",
+      "output": ".claude/skills/rllm-run/SKILL.md"
+    },
+    {
+      "name": "rllm-train",
+      "group": "rllm",
+      "source_path": "skill-bank/rllm/rllm-train",
+      "output": ".claude/skills/rllm-train/SKILL.md"
+    },
+    {
+      "name": "traj-analyze-rllm",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-analyze-rllm",
+      "output": ".claude/skills/traj-analyze-rllm/SKILL.md"
+    },
+    {
+      "name": "traj-launch-training",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-launch-training",
+      "output": ".claude/skills/traj-launch-training/SKILL.md"
+    },
+    {
+      "name": "traj-loop",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-loop",
+      "output": ".claude/skills/traj-loop/SKILL.md"
+    },
+    {
+      "name": "traj-optimize",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-optimize",
+      "output": ".claude/skills/traj-optimize/SKILL.md"
+    },
+    {
+      "name": "traj-segment",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-segment",
+      "output": ".claude/skills/traj-segment/SKILL.md"
+    },
+    {
+      "name": "traj-setup",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-setup",
+      "output": ".claude/skills/traj-setup/SKILL.md"
+    },
+    {
+      "name": "traj-status",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-status",
+      "output": ".claude/skills/traj-status/SKILL.md"
+    },
+    {
+      "name": "traj-train-optimize",
+      "group": "traj",
+      "source_path": "skill-bank/traj/traj-train-optimize",
+      "output": ".claude/skills/traj-train-optimize/SKILL.md"
+    }
+  ]
+}

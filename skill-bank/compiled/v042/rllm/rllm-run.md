@@ -1,0 +1,252 @@
+---
+description: Launch rllm_train training via config.json. Starts the training process
+  as a background task, confirms successful startup, and returns task ID and log path
+  for rllm-monitor to consume.
+metadata:
+  categories:
+  - machine-learning
+  - training
+  version: 1.1.0
+name: rllm-run
+---
+
+
+# rllm-run — 启动训练
+
+你负责启动 rllm_train 训练进程并确保它正常运行。
+
+## 职责边界
+
+你只负责**启动 + 确认**。不负责：
+- 生成配置（那是 rllm-config 的职责）
+- 持续监控（那是 rllm-monitor 的职责）
+- 分析结果（那是 rllm-analyze 的职责）
+
+## 输入
+
+编排者传入 run_id，你从中定位配置文件：
+
+```
+run_id: <run_id>
+config 路径: rllm_train/output/runs/<run_id>/config.json
+```
+
+## 执行步骤
+
+### 1. 验证配置
+
+用程序化方式验证配置文件参数合理：
+
+```bash
+python -c "
+from rllm_train.config import TrainingConfig
+config = TrainingConfig.from_json('rllm_train/output/runs/<run_id>/config.json')
+print(config.summary())
+"
+```
+
+确认必要字段存在且合法：model_name, num_problems, learning_rate, run_id。
+
+同时确认 package/task 元数据：
+- `task_id` 存在；未提供时 `TrainingConfig` 会使用 run_id
+- `skill_package_id` 存在；未提供时 `TrainingConfig` 会从 `skill-bank/registry.json` 推断
+- `skill_package_manifest` 可为空；加载配置后会自动补齐
+
+### 2. 确认输出目录
+
+确保输出目录存在：
+
+```bash
+mkdir -p rllm_train/output/runs/<run_id>
+```
+
+### 3. 探测 GPU 并启动训练
+
+启动前必须动态探测当前机器可见 GPU 数量，不得依赖 rllm-config 阶段的默认卡数。`config.json` 中 `num_gpus="auto"` 表示使用所有当前可见 GPU。
+
+先运行探测脚本，读取 config 中的硬件意图，写回本轮实际硬件信息：
+
+```bash
+python - <<'PY'
+import json
+import subprocess
+from pathlib import Path
+
+config_path = Path('rllm_train/output/runs/<run_id>/config.json')
+data = json.loads(config_path.read_text())
+requested = data.get('num_gpus', 'auto')
+
+try:
+    import torch
+    detected = torch.cuda.device_count() if torch.cuda.is_available() else 0
+    names = [torch.cuda.get_device_name(i) for i in range(detected)]
+except Exception:
+    try:
+        out = subprocess.check_output(['nvidia-smi', '-L'], text=True)
+        names = [line.split(':', 1)[1].split('(')[0].strip() for line in out.splitlines() if line.strip()]
+        detected = len(names)
+    except Exception:
+        detected = 0
+        names = []
+
+if requested == 'auto':
+    resolved = detected
+else:
+    resolved = int(requested)
+    if detected and resolved > detected:
+        raise SystemExit(f'requested num_gpus={resolved}, but only detected {detected}')
+
+if resolved < 0:
+    resolved = 0
+
+data['resolved_num_gpus'] = resolved
+data['resolved_gpu_type'] = names[0] if names else ''
+data['resolved_gpu_names'] = names
+config_path.write_text(json.dumps(data, indent=2, ensure_ascii=False))
+print(json.dumps({'requested_num_gpus': requested, 'resolved_num_gpus': resolved, 'gpu_names': names}, ensure_ascii=False))
+PY
+```
+
+然后按 `resolved_num_gpus` 选择启动命令：
+
+- `resolved_num_gpus <= 1`：使用单进程启动
+  ```bash
+  RLLM_TASK_ID="<task_id>" RLLM_SKILL_PACKAGE_ID="<skill_package_id>" python -m rllm_train.run_training rllm_train/output/runs/<run_id>/config.json > rllm_train/output/runs/<run_id>/training_log.txt 2>&1
+  ```
+
+- `resolved_num_gpus > 1`：使用所有可见 GPU 启动 torchrun
+  ```bash
+  RLLM_TASK_ID="<task_id>" RLLM_SKILL_PACKAGE_ID="<skill_package_id>" torchrun --nproc_per_node=<resolved_num_gpus> -m rllm_train.run_training rllm_train/output/runs/<run_id>/config.json > rllm_train/output/runs/<run_id>/training_log.txt 2>&1
+  ```
+
+`<task_id>` 和 `<skill_package_id>` 从 config.json 读取；如果为空，可省略对应环境变量，让 `TrainingConfig` 使用默认值。
+
+如果 `resolved_num_gpus > 1` 但 `torchrun` 不存在、`torch.distributed` 不可用、或训练代码在启动日志中显示不支持分布式，必须报告错误，不要静默回退到单卡。
+
+**必须使用 `run_in_background: true`**，使训练在后台运行。
+
+### VERL 后端启动 (backend=verl)
+
+当 config.json 中包含 `"backend": "verl"` 时，跳过标准 torchrun 启动流程，使用以下 VERL 专用启动流程：
+
+#### 环境检查
+
+启动前检查 VERL 和 Ray 可用性：
+
+```bash
+python -c "
+import sys
+try:
+    import verl
+    print(f'VERL version: {verl.__version__}')
+except ImportError:
+    print('ERROR: verl not installed. Run: pip install -e verl_latest/')
+    sys.exit(1)
+
+try:
+    import ray
+    print(f'Ray version: {ray.__version__}')
+except ImportError:
+    print('ERROR: ray not installed. Run: pip install ray')
+    sys.exit(1)
+
+# Check GPU via nvidia-smi
+import subprocess
+try:
+    out = subprocess.check_output(['nvidia-smi', '-L'], text=True)
+    gpu_count = len([l for l in out.splitlines() if 'GPU' in l])
+    print(f'GPUs available: {gpu_count}')
+except Exception:
+    print('WARN: nvidia-smi failed, Ray will auto-detect')
+"
+```
+
+#### VERL 训练启动命令
+
+```bash
+bash rllm_train/output/runs/<run_id>/run_verl.sh > rllm_train/output/runs/<run_id>/training_log.txt 2>&1
+```
+
+**必须使用 `run_in_background: true`**。
+
+注意：
+- VERL 通过 Ray 自动管理 GPU 分配，不需要 torchrun 包装
+- run_verl.sh 已包含完整的 `python -m verl.trainer.main_ppo` 命令和所有 Hydra CLI 参数
+- 日志重定向到统一的 training_log.txt 路径，与 TRL 模式保持一致
+- Ray 集群由 VERL 训练脚本自动初始化和管理
+
+#### VERL 启动确认
+
+等待 30 秒后检查（VERL 需要更长的 Ray 集群初始化时间）：
+
+```bash
+sleep 30 && tail -30 rllm_train/output/runs/<run_id>/training_log.txt
+```
+
+确认日志中出现以下内容表示启动成功：
+- Ray 集群初始化消息（如 `Started a local Ray instance` 或 `Ray cluster is ready`）
+- 任务配置打印（`TaskRunner` 相关日志）
+- 无 Traceback / Error
+
+如果 60 秒内日志仍为空或只含 Ray 启动信息无训练内容，报告警告但不中止（VERL 模型加载 + vLLM 初始化可能需 2-5 分钟）。
+
+#### Auto Mode 权限处理
+
+如果 `Bash` 工具调用被 auto mode 阻止（如 `run_verl.sh` 被拒绝），必须向用户输出明确的权限添加指令，不得静默失败：
+
+```
+Auto mode 阻止了训练启动。请在终端执行以下命令添加权限后重试：
+
+  !allow bash "rllm_train/output/runs/<run_id>/run_verl.sh"
+
+或手动运行：
+
+  !bash rllm_train/output/runs/<run_id>/run_verl.sh > rllm_train/output/runs/<run_id>/training_log.txt 2>&1 &
+```
+
+**禁止**在权限被阻止后等待用户输入"继续"而不给出具体指令。
+**禁止**跳过启动步骤直接报告"训练已启动"。
+
+### 4. 确认启动成功
+
+等待 10 秒后检查：
+
+```bash
+sleep 10 && head -5 rllm_train/output/runs/<run_id>/training_log.txt
+```
+
+确认日志文件非空且无即时错误。
+
+如果日志中出现以下任一内容，说明启动失败：
+- `Traceback`
+- `Error`
+- `ModuleNotFoundError`
+- `FileNotFoundError`
+
+启动失败时：报告错误内容，不重试，将控制权交回编排者。
+
+### 5. 返回结果
+
+输出格式：
+
+```
+训练已启动
+===========
+run_id:     <run_id>
+task_id:    <background_task_id>
+日志文件:    rllm_train/output/runs/<run_id>/training_log.txt
+配置文件:    rllm_train/output/runs/<run_id>/config.json
+```
+
+编排者将 task_id 和日志路径传递给 rllm-monitor。
+
+## 错误处理
+
+| 错误类型 | 处理方式 |
+|----------|---------|
+| config.json 不存在 | 报告错误，提示先运行 rllm-config |
+| 配置参数不合法 | TrainingConfig 校验失败，报告具体字段和原因 |
+| ModuleNotFoundError | 报告缺失模块，建议 pip install 安装依赖 |
+| CUDA/MPS 错误 | 建议设置 CUDA_VISIBLE_DEVICES="" 使用 CPU，或检查 GPU 驱动 |
+| OOM (Out of Memory) | 建议减小 batch_size、num_generations 或 max_completion_length |
+| 启动后立即崩溃（日志有 Traceback） | 报告完整错误信息，不重试 |

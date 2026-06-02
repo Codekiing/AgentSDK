@@ -1,0 +1,26 @@
+{
+  "round": 10,
+  "status": "optimization_complete",
+  "training": {
+    "run_id": "run_verl_gsm8k_0.5b_r10",
+    "run_ids": [
+      "run_verl_gsm8k_0.5b_r10"
+    ],
+    "session_id": "743765dc-6160-4b38-9ebc-fb46ff27a8ef",
+    "reward": 0.7935,
+    "success": false,
+    "task_id": "gsm8k_qwen0.5b_round10",
+    "skill_package_id": null,
+    "skill_package_manifest": null,
+    "error": null,
+    "completed_at": "2026-06-02T09:03:08.247247+00:00"
+  },
+  "updated_at": "2026-06-02T09:29:17.357027+00:00",
+  "optimization": {
+    "report_path": "traj_opt/output/rllm/reports/20260602-092500-rllm-codefix-r10.md",
+    "patches_generated": 2,
+    "patches_accepted": 2,
+    "completed_at": "2026-06-02T09:29:17.357027+00:00"
+  },
+  "created_at": "2026-06-02T09:03:08.247247+00:00"
+}

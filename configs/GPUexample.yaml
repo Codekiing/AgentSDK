@@ -1,0 +1,52 @@
+# =============================================================
+# GPU 版本 - Qwen2.5-0.5B + GSM8K + GRPO Agent训练
+# 适配 4x A100-SXM4-80GB, CUDA 13.0
+# =============================================================
+
+# --- 必填字段 ---
+train_backend: verl
+tokenizer_name_or_path: /lixiang/project/huxing/Project_test/AgentSDKMetricSkill/Qwen2.5-0.5B-Instruct
+model_name: Qwen2.5-0.5B-Instruct
+agent_name: math
+agent_engine_wrapper_path: /lixiang/project/huxing/Project_test/AgentSDKMetricSkill/agents/math_agent.py
+
+# --- 基础参数 ---
+num_gpus_per_node: 2
+num_node: 1
+max_steps: 3
+use_tensorboard: false
+
+# --- 推理参数 ---
+infer_tensor_parallel_size: 1
+max_model_len: 2048
+max_num_seqs: 32
+gpu_memory_utilization: 0.5
+max_tokens: 2048
+dtype: bfloat16
+temperature: 0.6
+top_p: 1.0
+enforce_eager: true
+rollout_n: 2
+
+# --- RL 超参数 ---
+lr: 1.0e-5
+entropy_coeff: 0.001
+clip_ratio: 0.2
+kl_coef: 0.001
+
+# --- VERL 子配置 ---
+verl:
+  train_files: /lixiang/project/huxing/Project_test/AgentSDKMetricSkill/data/gsm8k/train.parquet
+  val_files: /lixiang/project/huxing/Project_test/AgentSDKMetricSkill/data/gsm8k/test.parquet
+  train_batch_size: 8
+  max_response_length: 1024
+  total_epochs: 1
+  total_training_steps: 10
+  save_freq: 999999
+  test_freq: 999999
+  val_before_train: false
+  ppo_mini_batch_size: 2
+  use_kl_loss: false
+  fsdp_param_offload: false
+  fsdp_optimizer_offload: false
+  adv_estimator: grpo

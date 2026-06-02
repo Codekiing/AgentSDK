@@ -1,0 +1,21 @@
+active:
+- 001-early-stopping
+- 002-reliability
+- 003-active-polling-mandate
+- 004-circuit-breaker
+- 005-behavioral-metrics
+- 006-step-event-echo
+- 007-robust-monitor-agent
+- traj-20260501-155627-anomaly-detection
+- traj-20260502-202806-loss-zero-detection
+- traj-20260502-213850-format-degradation
+- traj-20260502-152342-anomaly-detection
+- traj-20260503-091950-data-surfacing
+- traj-20260518-021805-anomaly-detection
+- traj-20260518-121744-anomaly-detection
+- verl-log-patterns
+- traj-20260601-012036-anomaly-detection
+- traj-20260601-120827-anomaly-detection
+base: base.md
+disabled: []
+profiles: {}

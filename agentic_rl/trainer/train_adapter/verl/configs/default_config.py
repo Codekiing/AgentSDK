@@ -390,5 +390,30 @@ DEFAULT_CONFIG = {
             "weight_pow": 2.0,
         },
     },
+    "reward": {
+        "num_workers": 8,
+        "custom_reward_function": {
+            "path": None,
+            "name": "compute_score",
+        },
+        "reward_manager": {
+            "_target_": "verl.workers.config.reward_model.RewardManagerConfig",
+            "source": "register",
+            "name": "naive",
+            "module": {
+                "_target_": "verl.trainer.config.config.ModuleConfig",
+                "path": None,
+                "name": "custom_reward_manager",
+            },
+        },
+        "reward_model": {
+            "enable": False,
+        },
+        "sandbox_fusion": {
+            "url": None,
+            "max_concurrent": 64,
+            "memory_limit_mb": 1024,
+        },
+    },
     "ray_init": {"num_cpus": None, "timeline_json_file": None},
 }

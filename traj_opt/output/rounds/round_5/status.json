@@ -1,0 +1,21 @@
+{
+  "round": 5,
+  "status": "training_complete",
+  "training": {
+    "run_id": "run_verl_gsm8k_0.5b_r5",
+    "run_ids": [
+      "run_verl_gsm8k_0.5b_r5"
+    ],
+    "session_id": "ae18fdb6-ae30-495b-b1c7-5959d2e445be",
+    "reward": 0.4837,
+    "success": true,
+    "task_id": "gsm8k_qwen0.5b_round5",
+    "skill_package_id": null,
+    "skill_package_manifest": null,
+    "error": null,
+    "completed_at": "2026-06-01T14:48:26.495284+00:00"
+  },
+  "updated_at": "2026-06-01T14:48:26.495284+00:00",
+  "optimization": null,
+  "created_at": "2026-06-01T14:48:26.495284+00:00"
+}

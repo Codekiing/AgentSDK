@@ -1,0 +1,19 @@
+active:
+- 001-phase4-abort
+- 002-error-recovery-ext
+- 003-circuit-breaker
+- 004-auto-continue-after-config
+- 005-stateful-orchestration
+- 006-fully-automatic
+- 007-auto-stop-conditions
+- traj-20260503-091950-round-signal
+- remote-backend-routing
+- verl-backend-routing
+- 008-phase5-5-analysis-report
+- traj-20260531-190926-round-signal
+- traj-20260531-192537-phase0
+- traj-20260601-040729-intro
+- traj-20260601-120827-round-signal
+base: base.md
+disabled: []
+profiles: {}
